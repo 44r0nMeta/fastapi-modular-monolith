@@ -5,9 +5,8 @@ uniform JSON error envelope:
 
     {"error": {"code": "not_found", "message": "...", "details": {...}}}
 
-Following the billing-service anti-IDOR convention: when a resource exists but
-is not owned by the caller, raise `NotFoundError` (404) — never leak existence
-with a 403.
+Anti-IDOR convention: when a resource exists but is not owned by the caller,
+raise `NotFoundError` (404) — never leak its existence with a 403.
 """
 
 from __future__ import annotations
@@ -28,10 +27,12 @@ class AppError(Exception):
         *,
         code: str | None = None,
         details: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
     ) -> None:
         self.message = message or self.message
         self.code = code or self.code
         self.details = details or {}
+        self.headers = headers or {}
         super().__init__(self.message)
 
 
@@ -69,3 +70,9 @@ class ValidationError(AppError):
     status_code = 422
     code = "validation_error"
     message = "Validation failed."
+
+
+class TooManyRequestsError(AppError):
+    status_code = 429
+    code = "rate_limit_exceeded"
+    message = "Too many requests."

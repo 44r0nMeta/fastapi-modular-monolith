@@ -60,6 +60,11 @@ class Settings(BaseSettings):
     REDIS_URL: str | None = None
     CACHE_DEFAULT_TTL_SECONDS: int = 60
 
+    # ---- Rate limiting (uses Redis when set, else in-memory) -------------
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_DEFAULT_TIMES: int = 100
+    RATE_LIMIT_DEFAULT_SECONDS: int = 60
+
     # ---- Scheduler -------------------------------------------------------
     SCHEDULER_ENABLED: bool = True
 

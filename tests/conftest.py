@@ -14,6 +14,8 @@ os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./test_app.db"
 os.environ["APP_ENV"] = "test"
 os.environ["SCHEDULER_ENABLED"] = "false"
 os.environ["DATABASE_AUTO_CREATE"] = "false"
+# Off by default in tests; the rate-limit test opts back in explicitly.
+os.environ["RATE_LIMIT_ENABLED"] = "false"
 os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-characters-long")
 os.environ.pop("ADMIN_EMAIL", None)
 os.environ.pop("ADMIN_PASSWORD", None)
