@@ -5,11 +5,11 @@ Register jobs from anywhere at import time:
     from app.core.scheduler import scheduled
 
     @scheduled(interval_minutes=5)
-    async def collect() -> None:
+    async def sync_data() -> None:
         ...
 
     @scheduled(cron="0 0 1 * *")   # 1st of month, 00:00
-    async def monthly_billing() -> None:
+    async def monthly_report() -> None:
         ...
 
 Jobs only run if `SCHEDULER_ENABLED` is true. The scheduler is started/stopped

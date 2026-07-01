@@ -4,16 +4,10 @@ An advanced, batteries-included starter for building **modular monoliths** with
 FastAPI — async end-to-end, feature-sliced, and designed so adding a new module
 is a one-command operation.
 
-It fuses two influences:
-
-- the layered, async, JWT-secured billing service (SQLModel + asyncpg + Alembic
-  + APScheduler), and
-- the [arctikant modular-monolith kit](https://github.com/arctikant/fastapi-modular-monolith-starter-kit)
-  (module-per-feature, repository pattern, gateways, event bus).
-
-…and removes their main pain points: **no hand-wiring routers**, and a
-**module generator** so new features are scaffolded, wired, and migration-ready
-in seconds.
+Each feature is a self-contained module (models, schemas, repository, service,
+routes, events) that **auto-registers** — no central router table to maintain.
+A built-in **module generator** scaffolds, wires, and makes a new feature
+migration-ready in seconds.
 
 ---
 
@@ -146,6 +140,20 @@ leaked. See `items/service.py`.
 
 **Uniform errors.** Raise `NotFoundError`, `ConflictError`, … from services;
 handlers emit `{"error": {"code", "message", "details"}}`.
+
+**Rate limiting.** Attach `RateLimiter(times, seconds)` as a dependency to any
+route or router. It uses Redis when `REDIS_URL` is set (atomic counters, safe
+across workers) and an in-memory window otherwise. Responses expose
+`X-RateLimit-*`; exceeding the budget returns `429` with `Retry-After`. The auth
+`login` / `register` / `refresh` endpoints are throttled out of the box.
+
+```python
+from fastapi import Depends
+from app.core.ratelimit import RateLimiter
+
+@router.post("/login", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+async def login(...): ...
+```
 
 ---
 
