@@ -17,6 +17,7 @@ module = Module(
     name="items",
     router=item_routes.router,
     order=20,
+    depends_on=["auth"],  # uses CurrentUser + AuthGateway from the auth module
     tags=["items"],
 )
 

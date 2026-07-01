@@ -10,6 +10,7 @@ module = Module(
     name="{{PLURAL}}",
     router={{PLURAL}}_routes.router,
     order=50,
+    depends_on=["auth"],  # generated routes use CurrentUser; drop if not needed
     tags=["{{PLURAL}}"],
 )
 
