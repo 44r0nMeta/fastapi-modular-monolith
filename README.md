@@ -161,5 +161,3 @@ make makemigration m="add x"       # autogenerate a revision
 make module name=order             # scaffold a module
 make up / make down                # docker compose stack
 ```
-
-See `CLAUDE.md` for architecture guidance aimed at AI coding assistants.
